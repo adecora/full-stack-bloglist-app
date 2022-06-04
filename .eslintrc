@@ -1,8 +1,13 @@
 {
-  "extends": "airbnb",
+  "extends": [
+    "airbnb",
+    "eslint:recommended"
+  ],
   "parser": "babel-eslint",
   "env": {
-    "browser": true
+    "browser": true,
+    "node": true,
+    "jest": true
   },
   "rules": {
     "semi": [
@@ -19,6 +24,13 @@
       {
         "skipUndeclared": true
       }
+    ],
+    "consistent-return": 0,
+    "no-underscore-dangle": [
+      "error", 
+      { 
+        "allow": ["_id", "__v"] 
+       }
     ]
   }
 }

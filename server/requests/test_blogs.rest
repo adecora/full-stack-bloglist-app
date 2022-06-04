@@ -1,0 +1,53 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkZWNvcmEiLCJpZCI6IjYxYTAxMmY4OTVkYTg5ZjA0MWI4NDEzMCIsImlhdCI6MTY1NDM2OTM5Mn0.0wi2vNjmenICccWgIK5YaaAOFrXVEEDseZE_AAFDxCQ
+
+{
+    "title": "freeCodeCamp",
+    "author": "Quincy Larson",
+    "url": "https://www.freecodecamp.org/",
+    "likes": 1000000
+}
+
+###
+
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkZWNvcmEiLCJpZCI6IjYxYTAxMmY4OTVkYTg5ZjA0MWI4NDEzMCIsImlhdCI6MTY1NDM2OTM5Mn0.0wi2vNjmenICccWgIK5YaaAOFrXVEEDseZE_AAFDxCQ
+
+{
+    "title": "The Odin Project",
+    "author": "Erik Trautman",
+    "url": "https://www.theodinproject.com/",
+    "likes": 1000000
+}
+
+###
+
+GET http://localhost:3003/api/blogs
+
+
+###
+
+PUT http://localhost:3003/api/blogs/6197ca63c5aa6d1b37f2aaa3
+Content-Type: application/json
+
+{
+    "author": "Erik Trautman",
+    "url": "https://www.theodinproject.com/",
+    "likes": 5
+}
+
+###
+
+DELETE http://localhost:3003/api/blogs/629baf3efdaab39796de1760
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkZWNvcmEiLCJpZCI6IjYxYTAxMmY4OTVkYTg5ZjA0MWI4NDEzMCIsImlhdCI6MTY1NDM2OTM5Mn0.0wi2vNjmenICccWgIK5YaaAOFrXVEEDseZE_AAFDxCQ
+
+###
+
+DELETE http://localhost:3003/api/blogs/619a91cc1331fdaef1d868f8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkZWNvcmEiLCJpZCI6IjYxYTAxMmY4OTVkYTg5ZjA0MWI4NDEzMCIsImlhdCI6MTY1NDM2OTM5Mn0.0wi2vNjmenICccWgIK5YaaAOFrXVEEDseZE_AAFDxCQ
+
+###
+
+DELETE http://localhost:3003/api/blogs/619a91c91331fdaef1d868f4

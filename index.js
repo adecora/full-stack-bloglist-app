@@ -1,16 +1,16 @@
-require('dotenv').config()
 require('module-alias/register')
 const chokidar = require('chokidar')
 const express = require('express')
 const path = require('path')
 require('express-async-errors')
+const logger = require('@root/server/utils/logger')
 
-const { PORT, inProduction } = require('@util/common')
+const { PORT, inProduction } = require('@util/config')
 
 const app = express()
 
 // Require is here so we can delete it from cache when files change (*)
-app.use('/api', (req, res, next) => require('@root/server')(req, res, next)) // eslint-disable-line
+app.use('/', (req, res, next) => require('@root/server/app')(req, res, next)) // eslint-disable-line
 
 /**
  *  Use "hot loading" in backend
@@ -19,7 +19,7 @@ const watcher = chokidar.watch('server') // Watch server folder
 watcher.on('ready', () => {
   watcher.on('all', () => {
     Object.keys(require.cache).forEach((id) => {
-      if (id.includes('server')) delete require.cache[id] // Delete all require caches that point to server folder (*)
+      if (id.includes('server') && !id.includes('models')) delete require.cache[id] // Delete all require caches that point to server folder (*)
     })
   })
 })
@@ -59,5 +59,5 @@ if (!inProduction) {
 }
 
 app.listen(PORT, () => {
-  console.log(`Started on port ${PORT}`)
+  logger.info(`Started on port ${PORT}`)
 })
