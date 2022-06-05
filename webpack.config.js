@@ -9,7 +9,7 @@ module.exports = (env, argv) => {
     ? []
     : [new webpack.HotModuleReplacementPlugin()] // Enable hot module replacement
 
-  const additionalEntries = mode === 'production' ? [] : ['webpack-hot-middleware/client?http://localhost:8000']
+  const additionalEntries = mode === 'production' ? [] : ['webpack-hot-middleware/client?http://localhost:3003']
 
   return {
     mode,
@@ -22,6 +22,7 @@ module.exports = (env, argv) => {
       alias: {
         Utilities: path.resolve(__dirname, 'client/util/'),
         Components: path.resolve(__dirname, 'client/components/'),
+        Services: path.resolve(__dirname, 'client/services/'),
         Assets: path.resolve(__dirname, 'client/assets/'),
         '@root': path.resolve(__dirname),
       },
@@ -68,7 +69,7 @@ module.exports = (env, argv) => {
       // Skip the part where we would make a html template
       new HtmlWebpackPlugin({
         template: 'index.html',
-        favicon: path.resolve(__dirname, 'client/assets/favicon-32x32.png'),
+        favicon: path.resolve(__dirname, 'client/assets/favicon.ico'),
       }),
       ...additionalPlugins,
     ],

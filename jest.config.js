@@ -4,4 +4,5 @@ module.exports = {
     '@root/(.*)': '<rootDir>/$1',
     '@util/(.*)': '<rootDir>/server/utils/$1',
   },
+  testPathIgnorePatterns: ['<rootDir>/cypress/'],
 }
