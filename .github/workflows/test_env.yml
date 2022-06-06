@@ -8,6 +8,7 @@ on:
 jobs:
   a_test_job:
     runs-on: ubuntu-20.04
+    environment: my_environment
     steps:
       - name: Repository secrets - access directly
         run: echo ${{ secrets.HEROKU_API_KEY }}
