@@ -32,3 +32,6 @@ jobs:
         env:
             SECRET: ${{ env.SECRET }}
         run: echo $SECRET
+      
+      - name: Check environment
+        run: printenv
