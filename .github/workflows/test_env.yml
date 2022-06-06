@@ -1,0 +1,34 @@
+name: Testing environment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  a_test_job:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Repository secrets - access directly
+        run: echo ${{ secrets.HEROKU_API_KEY }}
+      
+      - name: Repository secrets - access from env
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: echo $HEROKU_API_KEY
+      
+      - name: Environment secrets - prefix secrets, directly
+        run: echo ${{ secrets.SECRET }}
+
+      - name: Environment secrets - prefix secrets, env
+        env:
+            SECRET: ${{ secrets.SECRET }}
+        run: echo $SECRET
+      
+      - name: Environment secrets - prefix env, directly
+        run: echo ${{ env.SECRET }}
+
+      - name: Environment secrets - prefix env, env
+        env:
+            SECRET: ${{ env.SECRET }}
+        run: echo $SECRET
