@@ -12,7 +12,9 @@
     "test": "cross-env NODE_ENV=test jest --verbose",
     "start:test": "cross-env NODE_ENV=test nodemon index.js",
     "cypress:open": "cypress open",
-    "test:e2e": "cypress run --browser firefox"
+    "test:e2e": "cypress run --browser firefox",
+    "deploy": "git push heroku main",
+    "logs:prod": "heroku logs --tail"
   },
   "engines": {
     "node": ">=10.15 <16"
