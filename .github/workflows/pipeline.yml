@@ -42,7 +42,7 @@ jobs:
           wait-on: http://localhost:3003
       
       - name: build
-        uses: npm run build
+        run: npm run build
       
       - name: Heroku deployment
         if: ${{ !contains(env.COMMIT_MESSAGES, '#skip') && github.event_name == 'push' }}
