@@ -1,0 +1,99 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+
+jobs:
+  deployment_pipeline:
+    runs-on: ubuntu-20.04
+    environment: my_environment
+    env:
+      MONGODB_URI: ${{ secrets.MONGODB_URI }}
+      TEST_MONGODB_URI: ${{ secrets.TEST_MONGODB_URI }}
+      SECRET: ${{ secrets.SECRET }}
+    steps:
+      - name: Checkout (access source code from git)
+        uses: actions/checkout@v3
+      
+      - name: Setup node environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '15'
+      
+      - name: npm install
+        run: npm install
+      
+      - name: lint
+        run: npm run lint
+
+      - name: test
+        run: npm test
+      
+      - name: e2e test
+        uses: cypress-io/github-action@v2
+        with:
+          command: npm run test:e2e
+          start: npm run start:test
+          wait-on: http://localhost:3003
+      
+      - name: build
+        uses: npm run build
+      
+      - name: Heroku deployment
+        if: ${{ !contains(env.COMMIT_MESSAGES, '#skip') && github.event_name == 'push' }}
+        env:
+          COMMIT_MESSAGES: ${{ join(toJson(github.event.commits.*.message)) }}
+        uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: "bloglist-app-a1985"
+          heroku_email: "alexinhocora@gmail.com"
+      
+      - name: Success build
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ contains(env.COMMIT_MESSAGES, '#discord') && success() }}
+        env:
+          COMMIT_MESSAGES: ${{ join(toJson(github.event.commits.*.message)) }}
+        with:
+          severity: info
+          avatarUrl: https://github.githubassets.com/images/modules/logos_page/Octocat.png
+          text: A new version of bloglist-app deployed
+          description: to https://bloglist-app-a1985.herokuapp.com/ by adecora.
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - name: Failure build
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ contains(env.COMMIT_MESSAGES, '#discord') && failure() }}
+        env:
+          COMMIT_MESSAGES: ${{ join(toJson(github.event.commits.*.message)) }}
+        with:
+          severity: error
+          avatarUrl: https://github.githubassets.com/images/modules/logos_page/Octocat.png
+          text: Build failed
+          description: commit
+          details: ${{ github.event.head_commit.url }} by ${{ github.event.head_commit.author.username }} broke the build :(
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+  tag_release:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout (access source code from git)
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
+
+      - name: Bump version and push tag
+        if: ${{ !contains(env.COMMIT_MESSAGES, '#skip') && github.event_name == 'push' }}
+        uses: anothrNick/github-tag-action@ce4b5ffa38e072fa7a901e417253c438fcc2ccce
+        env:
+          COMMIT_MESSAGES: ${{ join(toJson(github.event.commits.*.message)) }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
